@@ -60,7 +60,9 @@ function App() {
           <Route path="checkout" element={(
             <Checkout cartDishes={cartDishes}/>
           )}>
-            <Route path="continue" element={<Order/>}/>
+            <Route path="continue" element={(
+              <Order cartDishes={cartDishes}/>
+            )}/>
           </Route>
           <Route path="*" element={(<h1>Not found</h1>)}/>
         </Routes>

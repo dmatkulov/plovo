@@ -24,3 +24,8 @@ export interface Customer {
   address: string;
   phone: string;
 }
+
+export interface OrderData {
+  customer: Customer;
+  dishes: CartDish[]
+}
