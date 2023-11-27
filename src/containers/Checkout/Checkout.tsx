@@ -14,7 +14,7 @@ const Checkout: React.FC<Props> = ({cartDishes}) => {
   
   return (
     <div className="row mt-2">
-      <div className="col-4 m-auto">
+      <div className="col-8 m-auto">
         <h4>Checkout</h4>
         <CartDishes cartDishes={cartDishes}/>
         <div className="d-flex gap-2">

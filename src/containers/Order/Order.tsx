@@ -21,6 +21,7 @@ const Order = () => {
 
   const onFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(customer);
   };
 
   return (
@@ -30,7 +31,7 @@ const Order = () => {
           <div className="form-group">
             <label htmlFor="name">Client name</label>
             <input
-              id="name" type="text" name="name"
+              id="name" type="text" name="name" required
               className="form-control"
               value={customer.name}
               onChange={customerChanged}
@@ -39,7 +40,7 @@ const Order = () => {
           <div className="form-group">
             <label htmlFor="address">Address</label>
             <input
-              id="address" type="text" name="address"
+              id="address" type="text" name="address" required
               className="form-control"
               value={customer.address}
               onChange={customerChanged}
@@ -48,7 +49,7 @@ const Order = () => {
           <div className="form-group mb-3">
             <label htmlFor="phone">Phone</label>
             <input
-              id="phone" type="text" name="phone"
+              id="phone" type="text" name="phone" required
               className="form-control"
               value={customer.phone}
               onChange={customerChanged}
