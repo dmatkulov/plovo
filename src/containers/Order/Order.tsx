@@ -81,7 +81,7 @@ const Order: React.FC<Props> = ({cartDishes}) => {
   );
 
   if (loading) {
-    form = <Spinner/>
+    form = <Spinner/>;
   }
 
   return (
