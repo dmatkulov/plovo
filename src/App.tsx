@@ -1,20 +1,49 @@
 import Toolbar from './components/Toolbar/Toolbar';
-import {useState} from 'react';
-import {CartDish, Dish} from './types';
+import {useCallback, useEffect, useState} from 'react';
+import {CartDish, Dish, DishesList} from './types';
 import Home from './containers/Home/Home';
 import NewDish from './containers/NewDish/NewDish';
-import {Route, Routes} from 'react-router-dom';
+import {Route, Routes, useLocation} from 'react-router-dom';
 import Checkout from './containers/Checkout/Checkout';
-import Order from "./containers/Order/Order";
+import Order from './containers/Order/Order';
+import axiosApi from './axiosApi';
 
 function App() {
-  
-  const [dishes, setDishes] = useState<Dish[]>([
-    {id: '1', name: 'Plov', description: 'Very tasty pilaf', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Afghan_Palo.jpg/280px-Afghan_Palo.jpg', price: 250},
-    {id: '2', name: 'Another Plov', description: 'Also tasty pilaf', image: 'https://cdn.momsdish.com/wp-content/uploads/2021/06/Uzbek-Plov-Recipe-05-600x900.jpg', price: 350},
-  ]);
+  const location = useLocation();
 
+  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [loading, setLoading] = useState(false);
   const [cartDishes, setCartDishes] = useState<CartDish[]>([]);
+
+  const fetchDishes = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const dishesResponse = await axiosApi.get<DishesList | null>('dishes.json');
+      const dishes = dishesResponse.data;
+
+      if (!dishes) {
+        return;
+      }
+
+      const newDishes = Object.keys(dishes).map((id) => {
+        const dish = dishes[id];
+        return {
+          ...dish,
+          id,
+        };
+      });
+        setDishes(newDishes);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      void fetchDishes();
+    }
+  }, [location.pathname, fetchDishes]);
 
   const addDish = (dish: Dish) => {
     setDishes((prev) => [...prev, dish]);
@@ -38,7 +67,7 @@ function App() {
       }
     });
   };
-  
+
 
   return (
     <>
@@ -49,6 +78,7 @@ function App() {
         <Routes>
           <Route path="/" element={(
             <Home
+              dishesLoading={loading}
               dishes={dishes}
               addToCart={addDishToCart}
               cartDishes={cartDishes}
