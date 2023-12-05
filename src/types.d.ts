@@ -17,7 +17,6 @@ export interface DishMutation {
   description: string;
   image: string;
   price: string;
-  type: string;
 }
 
 export interface CartDish {

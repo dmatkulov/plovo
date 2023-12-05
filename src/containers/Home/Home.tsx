@@ -9,13 +9,20 @@ interface Props {
   dishes: Dish[];
   addToCart: (dish: Dish) => void;
   cartDishes: CartDish[];
+  deleteDish: (id: string) => void;
 }
 
-const Home: React.FC<Props> = ({dishesLoading, dishes, addToCart, cartDishes}) => {
+const Home: React.FC<Props> = ({dishesLoading, dishes, addToCart, cartDishes, deleteDish}) => {
+
   return (
     <div className="row mt-2">
       <div className="col-8">
-        {dishesLoading ? <Spinner/> : <Dishes dishes={dishes} addToCart={addToCart}/>}
+        {dishesLoading ? <Spinner/> : (
+          <Dishes
+            dishes={dishes}
+            addToCart={addToCart}
+            deleteDish={deleteDish}
+          />)}
       </div>
       <div className="col-4">
         <Cart cartDishes={cartDishes}/>

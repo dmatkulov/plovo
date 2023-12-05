@@ -33,7 +33,7 @@ function App() {
           id,
         };
       });
-        setDishes(newDishes);
+      setDishes(newDishes);
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,6 @@ function App() {
       void fetchDishes();
     }
   }, [location.pathname, fetchDishes]);
-
-  const addDish = (dish: Dish) => {
-    setDishes((prev) => [...prev, dish]);
-  };
 
   const addDishToCart = (dish: Dish) => {
     setCartDishes((prevState) => {
@@ -68,7 +64,17 @@ function App() {
     });
   };
 
-
+  const deleteDish = async (id: string) => {
+    if (window.confirm('Do you want to delete?')) {
+      await axiosApi.delete('/dishes/' + id + '.json');
+      setCartDishes((prevState) => {
+        return prevState.filter(cartDish => {
+          return cartDish.dish.id !== id;
+        });
+      });
+      await fetchDishes();
+    }
+  };
   return (
     <>
       <header>
@@ -82,11 +88,11 @@ function App() {
               dishes={dishes}
               addToCart={addDishToCart}
               cartDishes={cartDishes}
+              deleteDish={deleteDish}
+
             />
           )}/>
-          <Route path="/new-dish" element={(
-            <NewDish onCreate={addDish}/>
-          )}/>
+          <Route path="/new-dish" element={(<NewDish/>)}/>
           <Route path="checkout" element={(
             <Checkout cartDishes={cartDishes}/>
           )}>

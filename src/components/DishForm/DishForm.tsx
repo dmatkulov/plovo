@@ -1,8 +1,8 @@
-import {Dish, DishMutation} from '../../types';
+import {ApiDish, DishMutation} from '../../types';
 import React, {useState} from 'react';
 
 interface Props {
-  onSubmit: (dish: Dish) => void;
+  onSubmit: (dish: ApiDish) => void;
 }
 
 const DishForm: React.FC<Props> = ({onSubmit}) => {
@@ -11,7 +11,6 @@ const DishForm: React.FC<Props> = ({onSubmit}) => {
     description: '',
     image: '',
     price: '',
-    type: '',
   });
 
   const changeDish = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -24,7 +23,6 @@ const DishForm: React.FC<Props> = ({onSubmit}) => {
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      id: Math.random().toString(),
       ...dish,
       price: parseFloat(dish.price),
     });
@@ -43,21 +41,6 @@ const DishForm: React.FC<Props> = ({onSubmit}) => {
           value={dish.name}
           onChange={changeDish}
         />
-      </div>
-      <div className="form-group">
-        <label htmlFor="type">Type</label>
-        <select
-          name="type"
-          id="type"
-          className="form-select"
-          value={dish.type}
-          onChange={changeDish}
-        >
-          <option value="">Empty</option>
-          <option value="first-course">First Course</option>
-          <option value="garnish">Garnish</option>
-          <option value="steak">Steak</option>
-        </select>
       </div>
       <div className="form-group">
         <label htmlFor="description">Description</label>
