@@ -1,17 +1,20 @@
 import {ApiDish, DishMutation} from '../../types';
 import React, {useState} from 'react';
 
+const initialState: DishMutation = {
+  name: '',
+  description: '',
+  image: '',
+  price: '',
+};
 interface Props {
   onSubmit: (dish: ApiDish) => void;
+  existingDish?: DishMutation;
+  isEdit?: boolean;
 }
 
-const DishForm: React.FC<Props> = ({onSubmit}) => {
-  const [dish, setDish] = useState<DishMutation>({
-    name: '',
-    description: '',
-    image: '',
-    price: '',
-  });
+const DishForm: React.FC<Props> = ({onSubmit, existingDish = initialState, isEdit  =false}) => {
+  const [dish, setDish] = useState<DishMutation>(existingDish);
 
   const changeDish = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setDish((prev) => ({
@@ -30,7 +33,7 @@ const DishForm: React.FC<Props> = ({onSubmit}) => {
 
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>Add new dish</h4>
+      <h4>{isEdit ? 'Edit dish' : 'Add new dish'}</h4>
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <input
@@ -75,7 +78,7 @@ const DishForm: React.FC<Props> = ({onSubmit}) => {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary mt-2">Create</button>
+      <button type="submit" className="btn btn-primary mt-2">{isEdit ? 'Edit' : 'Create'}</button>
     </form>
   );
 };

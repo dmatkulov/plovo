@@ -7,6 +7,7 @@ import {Route, Routes, useLocation} from 'react-router-dom';
 import Checkout from './containers/Checkout/Checkout';
 import Order from './containers/Order/Order';
 import axiosApi from './axiosApi';
+import EditDish from './containers/EditDish/EditDish';
 
 function App() {
   const location = useLocation();
@@ -93,6 +94,7 @@ function App() {
             />
           )}/>
           <Route path="/new-dish" element={(<NewDish/>)}/>
+          <Route path="/edit-dish/:id" element={<EditDish/>}/>
           <Route path="checkout" element={(
             <Checkout cartDishes={cartDishes}/>
           )}>
