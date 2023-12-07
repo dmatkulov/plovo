@@ -4,14 +4,14 @@ import CartDishes from '../../components/Cart/CartDishes';
 import {Link, Navigate, Outlet} from 'react-router-dom';
 
 interface Props {
-  cartDishes: CartDish[]
+  cartDishes: CartDish[];
 }
+
 const Checkout: React.FC<Props> = ({cartDishes}) => {
-  
   if (cartDishes.length === 0) {
-    return <Navigate to="/"/>;
+    return <Navigate to="/" />;
   }
-  
+
   return (
     <div className="row mt-2">
       <div className="col-8 m-auto">

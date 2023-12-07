@@ -9,7 +9,6 @@ interface Props {
 }
 
 const Dishes: React.FC<Props> = ({dishes, addToCart, deleteDish}) => {
-  console.log('Dishes', dishes);
   return (
     <>
       <h4>Dishes</h4>

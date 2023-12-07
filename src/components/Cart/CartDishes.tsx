@@ -10,7 +10,7 @@ const CartDishes: React.FC<Props> = ({cartDishes}) => {
   const total = cartDishes.reduce((sum, cartDish) => {
     return sum + cartDish.amount * cartDish.dish.price;
   }, 0);
-  
+
   return (
     <>
       {cartDishes.map((cartDish) => (

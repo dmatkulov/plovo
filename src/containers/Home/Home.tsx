@@ -13,18 +13,18 @@ interface Props {
 }
 
 const Home: React.FC<Props> = ({dishesLoading, dishes, addToCart, cartDishes, deleteDish}) => {
-
   return (
     <div className="row mt-2">
-      <div className="col-8">
+      <div className="col-7">
         {dishesLoading ? <Spinner/> : (
           <Dishes
             dishes={dishes}
             addToCart={addToCart}
             deleteDish={deleteDish}
-          />)}
+          />
+        )}
       </div>
-      <div className="col-4">
+      <div className="col-5">
         <Cart cartDishes={cartDishes}/>
       </div>
     </div>

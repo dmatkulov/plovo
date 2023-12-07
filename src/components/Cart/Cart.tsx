@@ -11,14 +11,13 @@ interface Props {
 const Cart: React.FC<Props> = ({cartDishes}) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  
-  
+
   let cart = (
     <div className="alert alert-primary">
       Cart is empty! Add something!
     </div>
   );
-  
+
   if (cartDishes.length > 0) {
     cart = (
       <>
@@ -29,7 +28,7 @@ const Cart: React.FC<Props> = ({cartDishes}) => {
       </>
     );
   }
-  
+
   return (
     <>
       <h4>Cart</h4>
