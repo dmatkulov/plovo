@@ -11,20 +11,20 @@ const EditDish: React.FC = () => {
   const [dish, setDish] = useState<ApiDish | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-
+  
   const fetchOneDish = useCallback(async () => {
     try {
-      const dishResponse = await axiosApi.get<ApiDish | null>('dishes/' + id + '.json');
+      const dishResponse = await axiosApi.get('/dishes/' + id + '.json');
       setDish(dishResponse.data);
     } finally {
       setLoading(false);
     }
   }, [id]);
-
+  
   useEffect(() => {
     void fetchOneDish();
   }, [fetchOneDish]);
-
+  
   const onSubmit = async (dish: ApiDish) => {
     try {
       setUpdating(true);
@@ -34,28 +34,28 @@ const EditDish: React.FC = () => {
       setUpdating(false);
     }
   };
-
+  
   const existingDish = dish ? {
     ...dish,
-    price: dish.price.toString(),
+    price: dish.price.toString()
   } : undefined;
-
+  
   let formSection = <Spinner/>;
-
+  
   if (!loading) {
     if (dish) {
       formSection = (
         <DishForm
-          onSubmit={onSubmit}
-          existingDish={existingDish}
-          isEdit
-          isLoading={updating}
+        onSubmit={onSubmit}
+        existingDish={existingDish}
+        isEdit
+        isLoading={updating}
       />);
     } else {
-      formSection = <h4>Not found</h4>;
+      formSection = <h4>Not found!</h4>;
     }
   }
-
+  
   return (
     <div className="row mt-2">
       <div className="col">

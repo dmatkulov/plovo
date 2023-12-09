@@ -7,7 +7,7 @@ import axiosApi from '../../axiosApi';
 const NewDish: React.FC = () => {
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
-
+  
   const createDish = async (dish: ApiDish) => {
     try {
       setCreating(true);
@@ -17,7 +17,7 @@ const NewDish: React.FC = () => {
       setCreating(false);
     }
   };
-
+  
   return (
     <div className="row mt-2">
       <div className="col">

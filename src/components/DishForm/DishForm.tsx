@@ -13,27 +13,32 @@ interface Props {
   onSubmit: (dish: ApiDish) => void;
   existingDish?: DishMutation;
   isEdit?: boolean;
-  isLoading?: boolean
+  isLoading?: boolean;
 }
 
-const DishForm: React.FC<Props> = ({onSubmit, existingDish = initialState, isEdit = false, isLoading = false}) => {
+const DishForm: React.FC<Props> = ({onSubmit, existingDish = initialState, isEdit = false, isLoading= false}) => {
   const [dish, setDish] = useState<DishMutation>(existingDish);
-
+  
   const changeDish = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setDish((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-
+  
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isLoading) {
+      return;
+    }
+    
     onSubmit({
       ...dish,
       price: parseFloat(dish.price),
     });
   };
-
+  
   return (
     <form onSubmit={onFormSubmit}>
       <h4>{isEdit ? 'Edit dish' : 'Add new dish'}</h4>
@@ -80,10 +85,10 @@ const DishForm: React.FC<Props> = ({onSubmit, existingDish = initialState, isEdi
           onChange={changeDish}
         />
       </div>
-
+      
       <button type="submit" className="btn btn-primary mt-2" disabled={isLoading}>
         {isLoading && <ButtonSpinner/>}
-        {isEdit ? 'Update' : 'Create'}
+        {isEdit ? 'Edit' : 'Create'}
       </button>
     </form>
   );

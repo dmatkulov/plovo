@@ -11,7 +11,6 @@ export type ApiDish = Omit<Dish, 'id'>;
 export interface DishesList {
   [id: string]: ApiDish;
 }
-
 export interface DishMutation {
   name: string;
   description: string;

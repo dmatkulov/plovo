@@ -1,16 +1,16 @@
 import {useCallback, useEffect, useState} from 'react';
-import axiosApi from '../../axiosApi';
 import {ApiOrders, Order} from '../../types';
+import axiosApi from '../../axiosApi';
 import Spinner from '../../components/Spinner/Spinner';
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   
-  const fetchDishes = useCallback(async () => {
-    try{
+  const fetchOrders = useCallback(async () => {
+    try {
       setLoading(true);
-      const ordersResponse = await axiosApi.get<ApiOrders | null>('/orders.json');
+      const ordersResponse = await axiosApi.get<ApiOrders | null>('orders.json');
       const orders = ordersResponse.data;
       
       if (!orders) {
@@ -28,6 +28,7 @@ const Orders = () => {
           totalPrice
         };
       });
+      
       setOrders(newOrders);
     } finally {
       setLoading(false);
@@ -35,8 +36,8 @@ const Orders = () => {
   }, []);
   
   useEffect(() => {
-    void fetchDishes();
-  }, [fetchDishes]);
+    void fetchOrders();
+  }, [fetchOrders]);
   
   return (
     <div className="row mt-2">
@@ -45,13 +46,15 @@ const Orders = () => {
         {loading ? <Spinner/> : orders.map((order) => (
           <div key={order.id} className="card mb-2">
             <div className="card-body">
-              <strong>{order.customer.name}</strong>
+              <strong>{order.customer.name} </strong>
               <span>Ordered for a total price of </span>
               <strong>{order.totalPrice} KGS</strong>
             </div>
           </div>
+          
         ))}
       </div>
+      Orders
     </div>
   );
 };

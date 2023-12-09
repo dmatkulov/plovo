@@ -12,10 +12,9 @@ import Layout from './components/Layout/Layout';
 
 function App() {
   const location = useLocation();
-  
   const [dishes, setDishes] = useState<Dish[]>([]);
-  const [loading, setLoading] = useState(false);
   const [cartDishes, setCartDishes] = useState<CartDish[]>([]);
+  const [loading, setLoading] = useState(false);
   
   const updateCart = useCallback((dishes: Dish[]) => {
     setCartDishes((prevState) => {
@@ -23,6 +22,7 @@ function App() {
       
       prevState.forEach((cartDish) => {
         const existingDish = dishes.find(dish => cartDish.dish.id === dish.id);
+        
         if (!existingDish) {
           return;
         }
@@ -31,8 +31,8 @@ function App() {
           ...cartDish,
           dish: existingDish,
         });
+        
       });
-      
       return newCartDishes;
     });
   }, []);
@@ -73,6 +73,11 @@ function App() {
   const deleteDish = async (id: string) => {
     if (window.confirm('Do you really want to delete?')) {
       await axiosApi.delete('dishes/' + id + '.json');
+      setCartDishes((prevState) => {
+        return prevState.filter(cartDish => {
+          return cartDish.dish.id !== id;
+        });
+      });
       await fetchDishes();
     }
   };
@@ -102,8 +107,8 @@ function App() {
   
   return (
     <>
-      <Layout/>
-      <Routes>
+      <Layout>
+        <Routes>
           <Route path="/" element={(
             <Home
               dishesLoading={loading}
@@ -113,7 +118,9 @@ function App() {
               deleteDish={deleteDish}
             />
           )}/>
-          <Route path="/new-dish" element={<NewDish/>}/>
+          <Route path="/new-dish" element={(
+            <NewDish/>
+          )}/>
           <Route path="/edit-dish/:id" element={<EditDish/>}/>
           <Route path="/checkout" element={(
             <Checkout cartDishes={cartDishes}/>
@@ -122,9 +129,10 @@ function App() {
               <Order cartDishes={cartDishes} clearCart={clearCart}/>
             )}/>
           </Route>
-          <Route path="/orders" element={<Orders/>} />
+          <Route path="/orders" element={<Orders/>}/>
           <Route path="*" element={(<h1>Not Found!</h1>)}/>
         </Routes>
+      </Layout>
     </>
   );
 }

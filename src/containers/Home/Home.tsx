@@ -13,6 +13,8 @@ interface Props {
 }
 
 const Home: React.FC<Props> = ({dishesLoading, dishes, addToCart, cartDishes, deleteDish}) => {
+
+  
   return (
     <div className="row mt-2">
       <div className="col-7">
