@@ -1,21 +1,27 @@
 import {Dish} from '../../types';
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {useAppDispatch} from '../../app/hooks';
+import {addDish} from '../../store/cartSlice';
+import ButtonSpinner from '../Spinner/ButtonSpinner';
 
 interface Props {
   dish: Dish;
-  onClick: (dish: Dish) => void;
+  deleteLoading: boolean | string;
   onDelete: React.MouseEventHandler;
 }
 
-const DishItem: React.FC<Props> = ({dish, onClick, onDelete}) => {
+const DishItem: React.FC<Props> = ({dish, onDelete, deleteLoading}) => {
   const imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png';
-
+  const dispatch = useAppDispatch();
   const image = dish.image || imageUrl;
   const imageStyle = {
     background: `url(${image}) no-repeat center center / cover`,
   };
-
+  const addDishToCart = () => {
+    dispatch(addDish(dish));
+  };
+  
   return (
     <div className="card mb-2">
       <div className="row no-gutters">
@@ -27,13 +33,15 @@ const DishItem: React.FC<Props> = ({dish, onClick, onDelete}) => {
             <p className="card-text">{dish.price} KGS</p>
             <p className="d-flex gap-2">
               <button className="btn btn-success"
-                      onClick={() => onClick(dish)}
+                      onClick={addDishToCart}
               >
                 Add
               </button>
               <button className="btn btn-danger"
                       onClick={onDelete}
+                      disabled={deleteLoading ? deleteLoading === dish.id : false}
               >
+                {deleteLoading && deleteLoading === dish.id && (<ButtonSpinner/>)}
                 Delete
               </button>
               <Link

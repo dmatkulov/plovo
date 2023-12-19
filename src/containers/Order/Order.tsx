@@ -1,21 +1,22 @@
 import React, {useCallback, useState} from 'react';
-import {CartDish, Customer, ApiOrder} from '../../types';
+import {Customer, ApiOrder} from '../../types';
 import axiosApi from '../../axiosApi';
 import {useNavigate} from 'react-router-dom';
 import Spinner from '../../components/Spinner/Spinner';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {clearCart, selectCartDishes} from '../../store/cartSlice';
 
-interface Props {
-  cartDishes: CartDish[];
-  clearCart: () => void;
-}
-
-const Order: React.FC<Props> = ({cartDishes, clearCart}) => {
+const Order: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const cartDishes = useAppSelector(selectCartDishes);
+  
   const [customer, setCustomer] = useState<Customer>({
     name: '',
     address: '',
     phone: '',
   });
+  
   const [loading, setLoading] = useState(false);
 
   const customerChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +39,7 @@ const Order: React.FC<Props> = ({cartDishes, clearCart}) => {
 
     try {
       await axiosApi.post('orders.json', order);
-      clearCart();
+      dispatch(clearCart());
       navigate('/');
     } finally {
       setLoading(false);
