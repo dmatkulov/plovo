@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 import DishForm from '../../components/DishForm/DishForm';
 import {ApiDish} from '../../types';
 import {useNavigate} from 'react-router-dom';
-import axiosApi from '../../axiosApi';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {selectCreateLoading} from '../../store/dishes/dishesSlice';
+import {createDish, fetchDishes} from '../../store/dishes/dishesThunks';
 
 const NewDish: React.FC = () => {
   const navigate = useNavigate();
-  const [creating, setCreating] = useState(false);
+  const dispatch = useAppDispatch();
   
-  const createDish = async (dish: ApiDish) => {
-    try {
-      setCreating(true);
-      await axiosApi.post('dishes.json', dish);
-      navigate('/');
-    } finally {
-      setCreating(false);
-    }
+  const createLoading = useAppSelector(selectCreateLoading);
+  
+  const onSubmit = async (dish: ApiDish) => {
+    await dispatch(createDish(dish));
+    await dispatch(fetchDishes());
+    navigate('/');
   };
   
   return (
     <div className="row mt-2">
       <div className="col">
-        <DishForm onSubmit={createDish} isLoading={creating}/>
+        <DishForm onSubmit={onSubmit} isLoading={createLoading}/>
       </div>
     </div>
   );

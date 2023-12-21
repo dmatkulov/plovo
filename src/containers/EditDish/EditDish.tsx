@@ -1,38 +1,28 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {ApiDish} from '../../types';
-import axiosApi from '../../axiosApi';
 import DishForm from '../../components/DishForm/DishForm';
 import Spinner from '../../components/Spinner/Spinner';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {selectFetchOneDishLoading, selectOneDish, selectUpdateDishLoading} from '../../store/dishes/dishesSlice';
+import {fetchDish, updateDish} from '../../store/dishes/dishesThunks';
 
 const EditDish: React.FC = () => {
-  const {id} = useParams();
-  const navigate = useNavigate();
-  const [dish, setDish] = useState<ApiDish | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
+  const dispatch = useAppDispatch();
+  const fetchLoading = useAppSelector(selectFetchOneDishLoading);
+  const updateLoading = useAppSelector(selectUpdateDishLoading);
+  const dish = useAppSelector(selectOneDish);
   
-  const fetchOneDish = useCallback(async () => {
-    try {
-      const dishResponse = await axiosApi.get('/dishes/' + id + '.json');
-      setDish(dishResponse.data);
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
+  const {id} = useParams() as { id: string };
+  const navigate = useNavigate();
   
   useEffect(() => {
-    void fetchOneDish();
-  }, [fetchOneDish]);
+    dispatch(fetchDish(id));
+  }, [dispatch, id]);
   
   const onSubmit = async (dish: ApiDish) => {
-    try {
-      setUpdating(true);
-      await axiosApi.put('dishes/' + id + '.json', dish);
-      navigate('/');
-    } finally {
-      setUpdating(false);
-    }
+    await dispatch(updateDish({id, dish}));
+    navigate('/');
   };
   
   const existingDish = dish ? {
@@ -42,15 +32,15 @@ const EditDish: React.FC = () => {
   
   let formSection = <Spinner/>;
   
-  if (!loading) {
+  if (!fetchLoading) {
     if (dish) {
       formSection = (
         <DishForm
-        onSubmit={onSubmit}
-        existingDish={existingDish}
-        isEdit
-        isLoading={updating}
-      />);
+          onSubmit={onSubmit}
+          existingDish={existingDish}
+          isEdit
+          isLoading={updateLoading}
+        />);
     } else {
       formSection = <h4>Not found!</h4>;
     }
